@@ -8,10 +8,11 @@ include $(TOPDIR)/rules.mk
 
 BOARD:=lantiq
 BOARDNAME:=Lantiq
-FEATURES:=squashfs ubifs
+FEATURES:=squashfs
 SUBTARGETS=xway xrx200
+MAINTAINER:=John Crispin <blogic@openwrt.org>
 
-LINUX_VERSION:=3.10.36
+KERNEL_PATCHVER:=3.18
 
 CPU_TYPE:=mips32r2
 

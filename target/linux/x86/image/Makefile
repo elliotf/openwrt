@@ -32,7 +32,7 @@ GRUB_SERIAL:=$(call qstrip,$(CONFIG_GRUB_SERIAL))
 
 ifneq ($(GRUB_SERIAL),)
   GRUB_CONSOLE_CMDLINE += console=$(GRUB_SERIAL),$(CONFIG_GRUB_BAUDRATE)n8
-  GRUB_SERIAL_CONFIG := serial --unit=0 --speed=$(CONFIG_GRUB_BAUDRATE) --word=8 --parity=no --stop=1
+  GRUB_SERIAL_CONFIG := serial --unit=0 --speed=$(CONFIG_GRUB_BAUDRATE) --word=8 --parity=no --stop=1 --rtscts=off
   GRUB_TERMINALS += serial
 endif
 
@@ -160,27 +160,21 @@ endef
 
 ifneq ($(CONFIG_VDI_IMAGES),)
   define Image/Build/vdi
-    # left here because the image builder doesnt need these
-    ifeq ($(1),ext4)
-		rm $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi || true
-		qemu-img convert -f raw -O vdi \
-			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
-			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi
-		# XXX: VBoxManage insists on setting perms to 0600
-		chmod 0644 $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi
-    endif
+	rm $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi || true
+	qemu-img convert -f raw -O vdi \
+		$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
+		$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi
+	# XXX: VBoxManage insists on setting perms to 0600
+	chmod 0644 $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vdi
   endef
 endif
 
 ifneq ($(CONFIG_VMDK_IMAGES),)
   define Image/Build/vmdk
-    # left here because the image builder doesnt need these
-    ifeq ($(1),ext4)
-		rm $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vmdk || true
-		qemu-img convert -f raw -O vmdk \
-			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
-			$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vmdk
-    endif
+	rm $(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vmdk || true
+	qemu-img convert -f raw -O vmdk \
+		$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).img \
+		$(BIN_DIR)/$(IMG_PREFIX)-combined-$(1).vmdk
   endef
 endif
 

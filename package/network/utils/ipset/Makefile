@@ -9,26 +9,22 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=ipset
-PKG_VERSION:=6.20.1
+PKG_VERSION:=6.24
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://ipset.netfilter.org
-PKG_MD5SUM:=8af741492752fbf24d3a28a9d1473d40
+PKG_MD5SUM:=8831b8f01458bf2abacc222884195a62
 
 PKG_MAINTAINER:=Jo-Philipp Wich <jow@openwrt.org>
+PKG_LICENSE:=GPL-2.0
 
 PKG_FIXUP:=autoreconf
 PKG_INSTALL:=1
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/ipset/Default
-  DEPENDS:= @(!(TARGET_ps3||TARGET_pxcab)||BROKEN)
-endef
-
 define Package/ipset
-$(call Package/ipset/Default)
   SECTION:=net
   CATEGORY:=Network
   DEPENDS+= +kmod-ipt-ipset +libmnl
@@ -49,6 +45,7 @@ IPSET_MODULES:= \
 	ipset/ip_set_bitmap_ipmac \
 	ipset/ip_set_bitmap_port \
 	ipset/ip_set_hash_ip \
+	ipset/ip_set_hash_ipmark \
 	ipset/ip_set_hash_ipport \
 	ipset/ip_set_hash_ipportip \
 	ipset/ip_set_hash_ipportnet \
@@ -71,7 +68,6 @@ define Package/ipset/install
 endef
 
 define KernelPackage/ipt-ipset
-$(call Package/ipset/Default)
   SUBMENU:=Netfilter Extensions
   TITLE:=IPset netfilter modules
   DEPENDS+= +kmod-ipt-core +kmod-nfnetlink
